@@ -113,3 +113,56 @@ class elliptic_curve:
     return points
 
 
+  def sum(self, P, Q):
+    """
+    To calculate P+Q on the curve
+    """
+    xp = P[0]
+    yp = P[1]
+
+    xq = Q[0]
+    yq = Q[1]
+
+    if P == (0, 0):
+      return Q
+    if Q == (0, 0):
+      return P
+
+    if P == Q:
+      m = (((3 * (xp ** 2) + self.a) % self.prime) *
+          mod.inverse_extended_eucledian(2 * yp, self.prime)) % self.prime
+    else:
+      if xp == xq:
+        return (0, 0)
+      else:
+        m = (((yp - yq) % self.prime) *
+            mod.inverse_extended_eucledian(xp - xq, self.prime)) % self.prime
+    print(m)
+    xr = (m ** 2 - xp - xq) % self.prime
+    yr1 = (-yp - m * (xr - xp)) % self.prime
+    yr2 = (-yq - m * (xr - xq)) % self.prime
+
+    if yr1 == yr2:
+      yr = yr1
+    else:
+      print("Something went wrong!")
+      return
+
+    return (xr, yr)
+
+
+  def scalar_multiples(self, m, P):
+    """
+    :return: [P , 2P, 3P ....... mP]
+    """
+
+    multi = [P] * m
+
+    for i in range(1, m):
+      multi[i] = self.sum(P, multi[i - 1])
+      print(multi)
+
+    return multi
+
+
+
