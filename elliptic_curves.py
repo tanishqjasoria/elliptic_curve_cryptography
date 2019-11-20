@@ -69,8 +69,9 @@ class elliptic_curve:
 
     for point in points:
       y2 = point[1]
-      if y2 in QR:
-        distill_points.append(i)
+
+      if (y2 in QR) or (y2 == 0):
+        distill_points.append(point)
 
     return distill_points
 
@@ -82,9 +83,13 @@ class elliptic_curve:
 
     y = []
 
+    if y2 == 0:
+      return [0]
+
     for i in range(self.prime):
-      if i**2 %self.prime == y2:
+      if (i**2 % self.prime == y2):
         y.append(i)
+
 
     return y
 
