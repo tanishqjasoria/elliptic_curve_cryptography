@@ -150,17 +150,39 @@ class elliptic_curve:
     return (xr, yr)
 
 
-  def scalar_multiples(self, m, P):
+  def scalar_multiple(self, m, P):
+    """
+    :return: mP
+    """
+    bits = []
+    while m:
+      bits.append(m & 1)
+      m >>=1
+
+    result = (0,0)
+    addend = P
+
+    for bit in bits:
+      if bit == 1:
+        result = self.sum(result, addend)
+      addend = self.sum(addend, addend)
+
+    return result
+
+
+  def scalar_multiples_list(self, m, P):
     """
     :return: [P , 2P, 3P ....... mP]
     """
 
     multi = [P] * m
-
+    order = -1
     for i in range(1, m):
       multi[i] = self.sum(P, multi[i - 1])
+      if multi[i] == (0,0):
+        order = i+1
 
-    return multi
+    return (multi[m%order - 1], order, multi)
 
 
 
