@@ -69,5 +69,6 @@ def inverse_extended_eucledian(n,p):
 
   :return: n^(-1) (mod p)
   """
+  n = n % p
   inv, buff1, buff2 = extended_eucledian(n, p)
   return inv % p
