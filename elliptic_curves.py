@@ -137,7 +137,6 @@ class elliptic_curve:
       else:
         m = (((yp - yq) % self.prime) *
             mod.inverse_extended_eucledian(xp - xq, self.prime)) % self.prime
-    print(m)
     xr = (m ** 2 - xp - xq) % self.prime
     yr1 = (-yp - m * (xr - xp)) % self.prime
     yr2 = (-yq - m * (xr - xq)) % self.prime
@@ -160,7 +159,6 @@ class elliptic_curve:
 
     for i in range(1, m):
       multi[i] = self.sum(P, multi[i - 1])
-      print(multi)
 
     return multi
 
